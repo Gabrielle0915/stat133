@@ -202,9 +202,10 @@ jfk_1000mi</code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li>How many airlines fly from LGA to DFW? <strong>num_lga_dfw</strong></li>
 </ol>
-<pre class="r"><code>num_lga_dfw &lt;- nrow(flights[flights$origin == &quot;LGA&quot; &amp; flights$dest == &quot;DFW&quot;, ])
+<pre class="r"><code>lga_dfw &lt;- flights[flights$origin == &quot;LGA&quot; &amp; flights$dest == &quot;DFW&quot;, ]
+num_lga_dfw &lt;- NROW(table(lga_dfw$carrier))
 num_lga_dfw</code></pre>
-<pre><code>## [1] 4858</code></pre>
+<pre><code>## [1] 3</code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li>Which airline had the most flights coming out of JFK? <strong>most_flights_jfk</strong></li>
 </ol>

@@ -100,7 +100,8 @@ jfk_1000mi
 
 9. How many airlines fly from LGA to DFW? __num_lga_dfw__
 ```{r}
-num_lga_dfw <- nrow(flights[flights$origin == "LGA" & flights$dest == "DFW", ])
+lga_dfw <- flights[flights$origin == "LGA" & flights$dest == "DFW", ]
+num_lga_dfw <- NROW(table(lga_dfw$carrier))
 num_lga_dfw
 ```
 
