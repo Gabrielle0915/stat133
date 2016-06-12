@@ -50,8 +50,10 @@ longest_dep_delay
 
 4. How long were the top 10 longest flights measured from departure to arrival? __longest_flights__
 ```{r}
-longest_flights <- flights$flight[order(flights$air_time, decreasing = TRUE) <= 10]
+longest_flights <- flights$air_time[(order(flights$air_time, decreasing = TRUE)[1:10])]
+#head(sort(flights$air_time,decreasing = TRUE),10)
 longest_flights
+
 ```
 
 5. What is the average departure delay time for United Airlines (carrier UA)? __ua_delay__
@@ -81,9 +83,6 @@ month_delay <- label[order(y,decreasing = TRUE)]
 month_delay
 
 
-
-
-
 ```
 
 7. How many unique planes does American Airlines (AA) have? __num_planes_aa__
@@ -94,8 +93,7 @@ num_planes_aa
 
 8. How many flights originating from JFK flew more than 1000 miles? __jfk_1000mi__
 ```{r}
-JFKflights <- flights[flights$origin == "JFK",]
-jfk_1000mi <- nrow(JFKflights[JFKflights$distance > 1000, ])
+jfk_1000mi <- nrow(flights[flights$origin == "JFK" & flights$distance > 1000,])
 jfk_1000mi
 
 ```

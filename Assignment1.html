@@ -157,9 +157,10 @@ longest_dep_delay</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>How long were the top 10 longest flights measured from departure to arrival? <strong>longest_flights</strong></li>
 </ol>
-<pre class="r"><code>longest_flights &lt;- flights$flight[order(flights$air_time, decreasing = TRUE) &lt;= 10]
+<pre class="r"><code>longest_flights &lt;- flights$air_time[(order(flights$air_time, decreasing = TRUE)[1:10])]
+#head(sort(flights$air_time,decreasing = TRUE),10)
 longest_flights</code></pre>
-<pre><code>##  [1] 2131 5038 1639 2511  586  145 1460 2144  835 5091</code></pre>
+<pre><code>##  [1] 695 691 686 686 683 679 676 676 675 671</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>What is the average departure delay time for United Airlines (carrier UA)? <strong>ua_delay</strong></li>
 </ol>
@@ -195,8 +196,7 @@ num_planes_aa</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>How many flights originating from JFK flew more than 1000 miles? <strong>jfk_1000mi</strong></li>
 </ol>
-<pre class="r"><code>JFKflights &lt;- flights[flights$origin == &quot;JFK&quot;,]
-jfk_1000mi &lt;- nrow(JFKflights[JFKflights$distance &gt; 1000, ])
+<pre class="r"><code>jfk_1000mi &lt;- nrow(flights[flights$origin == &quot;JFK&quot; &amp; flights$distance &gt; 1000,])
 jfk_1000mi</code></pre>
 <pre><code>## [1] 62071</code></pre>
 <ol start="9" style="list-style-type: decimal">
