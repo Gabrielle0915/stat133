@@ -103,6 +103,7 @@ jfk_1000mi
 lga_dfw <- flights[flights$origin == "LGA" & flights$dest == "DFW", ]
 num_lga_dfw <- NROW(table(lga_dfw$carrier))
 num_lga_dfw
+
 ```
 
 10. Which airline had the most flights coming out of JFK? __most_flights_jfk__
