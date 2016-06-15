@@ -107,19 +107,19 @@ Use `str_detect` to see if there are any countries with the world "island" in th
 
 ```{r}
 # Your code here
-str_detect(countries, ignore.case("island"))
+any(str_detect(countries, ignore.case("island")))
 ```
 
 Use `str_subset` to find all countries that begin with a capital `A`.
 ```{r}
 # Your code here
-countries[str_detect(countries, "^A" )] 
+str_subset(countries,"^A")
 ```
 
 Find all countries that end with `stan`
 ```{r}
 # Your code here
-countries[str_detect(countries, ".stan" )] 
+str_subset(countries, ".stan" )
 ```
 
 Use `str_replace_all` to replace the `$`'s in `baws` with `s`'s.  Recall that the `$` is a metacharacter.
@@ -131,7 +131,7 @@ str_replace_all(baws, "\\$", "s")
 Use a character class (denoted by square brackets) to find all countries beginning with a vowel and ending with a consonant.
 ```{r}
 # Fill in
-countries[str_detect(countries, "^[AEIOUaeiou].*[^AEIOUaeiou]$")]
+str_subset(countries, "^[AEIOUaeiou].*[^AEIOUaeiou]$")
 ```
 
 

@@ -298,36 +298,19 @@ str_replace_all(countries, &quot;-&quot;, &quot; &quot;)</code></pre>
 ## [193] &quot;Zambia&quot;                   &quot;Zimbabwe&quot;</code></pre>
 <p>Use <code>str_detect</code> to see if there are any countries with the world “island” in them, ignoring case. You may also want to look up how to use <code>ignore.case</code>.</p>
 <pre class="r"><code># Your code here
-str_detect(countries, ignore.case(&quot;island&quot;))</code></pre>
+any(str_detect(countries, ignore.case(&quot;island&quot;)))</code></pre>
 <pre><code>## Please use (fixed|coll|regexp)(x, ignore_case = TRUE) instead of ignore.case(x)</code></pre>
-<pre><code>##   [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [12] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [23] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
-##  [34]  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE
-##  [45] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [56] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [67] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [78] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-##  [89] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [100] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
-## [111] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [122] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [144] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
-## [155] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [166] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [177]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-## [188] FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>Use <code>str_subset</code> to find all countries that begin with a capital <code>A</code>.</p>
 <pre class="r"><code># Your code here
-countries[str_detect(countries, &quot;^A&quot; )] </code></pre>
+str_subset(countries,&quot;^A&quot;)</code></pre>
 <pre><code>##  [1] &quot;Afghanistan&quot;     &quot;Albania&quot;         &quot;Algeria&quot;        
 ##  [4] &quot;American-Samoa&quot;  &quot;Andorra&quot;         &quot;Angola&quot;         
 ##  [7] &quot;Anguilla&quot;        &quot;Antigua-Barbuda&quot; &quot;Argentina&quot;      
 ## [10] &quot;Argentine&quot;       &quot;Australia&quot;       &quot;Austria&quot;</code></pre>
 <p>Find all countries that end with <code>stan</code></p>
 <pre class="r"><code># Your code here
-countries[str_detect(countries, &quot;.stan&quot; )] </code></pre>
+str_subset(countries, &quot;.stan&quot; )</code></pre>
 <pre><code>## [1] &quot;Afghanistan&quot; &quot;Pakistan&quot;</code></pre>
 <p>Use <code>str_replace_all</code> to replace the <code>$</code>’s in <code>baws</code> with <code>s</code>’s. Recall that the <code>$</code> is a metacharacter.</p>
 <pre class="r"><code>baws &lt;- &quot;Bo$$&quot;
@@ -335,7 +318,7 @@ str_replace_all(baws, &quot;\\$&quot;, &quot;s&quot;)</code></pre>
 <pre><code>## [1] &quot;Boss&quot;</code></pre>
 <p>Use a character class (denoted by square brackets) to find all countries beginning with a vowel and ending with a consonant.</p>
 <pre class="r"><code># Fill in
-countries[str_detect(countries, &quot;^[AEIOUaeiou].*[^AEIOUaeiou]$&quot;)]</code></pre>
+str_subset(countries, &quot;^[AEIOUaeiou].*[^AEIOUaeiou]$&quot;)</code></pre>
 <pre><code>##  [1] &quot;Afghanistan&quot;     &quot;Ecuador&quot;         &quot;Egypt&quot;          
 ##  [4] &quot;El-Salvador&quot;     &quot;Iceland&quot;         &quot;Iran&quot;           
 ##  [7] &quot;Iraq&quot;            &quot;Ireland&quot;         &quot;Israel&quot;         
