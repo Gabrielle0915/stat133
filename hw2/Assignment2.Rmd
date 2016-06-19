@@ -195,77 +195,15 @@ dna_to_aa <- function(InputDNA){
     endId <- endId + 3
     PositionOfAminoAcid <- PositionOfAminoAcid + 1 
   }
-  for (i in 1:numberOfAminoAcid) {
-    if(AminoAcid[i] == "TTT" | AminoAcid[i] == "TTC"){
-      result[i] <- "F"
-    }
-    else if(str_detect(AminoAcid[i], "^[CT][T]")){
-      result[i] <- "L"
-    }    
-    else if(str_detect(AminoAcid[i], "^[A][T][TCA]")){
-      result[i] <- "I"
-    }   
-    else if(AminoAcid[i] == "ATG"){
-      result[i] <- "M"
-    }
-    else if(str_detect(AminoAcid[i], "^[G][T]")){
-      result[i] <- "V"
-    }
-    else if(str_detect(AminoAcid[i], "^[T][C]")){
-      result[i] <- "S"
-    }
-    else if(str_detect(AminoAcid[i], "^[C][C]")){
-      result[i] <- "P"
-    } 
-    else if(str_detect(AminoAcid[i], "^[A][C]")){
-      result[i] <- "T"
-    }
-    else if(str_detect(AminoAcid[i], "^[G][C]")){
-      result[i] <- "A"
-    }
-    else if(str_detect(AminoAcid[i], "^[T][A][TC]")){
-      result[i] <- "Y"
-    }
-    else if((str_detect(AminoAcid[i], "^[T][A][AG]")) | AminoAcid[i] == "TGA"){
-      result[i] <- "Stop"
-    }
-    else if(str_detect(AminoAcid[i], "^[C][A][TC]")){
-      result[i] <- "H"
-    }
-    else if(str_detect(AminoAcid[i], "^[C][A][AG]")){
-      result[i] <- "Q"
-    }
-    else if(str_detect(AminoAcid[i], "^[A][A][TC]")){
-      result[i] <- "N"
-    }
-    else if(str_detect(AminoAcid[i], "^[A][A][AG]")){
-      result[i] <- "K"
-    }
-    else if(str_detect(AminoAcid[i], "^[G][A][TC]")){
-      result[i] <- "D"
-    }
-    else if(str_detect(AminoAcid[i], "^[G][A][AG]")){
-      result[i] <- "E"
-    }
-    else if(str_detect(AminoAcid[i], "^[T][G][TC]")){
-      result[i] <- "C"
-    }
-    else if(AminoAcid[i] == "TGG"){
-      result[i] <- "W"
-    }
-    else if(str_detect(AminoAcid[i], "^[C][G]")){
-      result[i] <- "R"
-    }
-    else if(str_detect(AminoAcid[i], "^[A][G][TC]")){
-      result[i] <- "S"
-    }
-    else if(str_detect(AminoAcid[i], "^[A][G][AG]")){
-      result[i] <- "R"
-    }
-    else if(str_detect(AminoAcid[i], "^[G][G]")){
-      result[i] <- "G"
+  transfer <- read_csv("codons.csv")
+  for(i in 1:numberOfAminoAcid){
+    for (j in 1:nrow(transfer)) {
+      if(AminoAcid[i] == transfer[[1]][j]){
+        result[i] <- transfer[[2]][j]
+      }
     }
   }
+  
   NameOfAminoAcid <- ""
   for (j in 1 : numberOfAminoAcid) {
     NameOfAminoAcid <- str_c(NameOfAminoAcid , result[j])

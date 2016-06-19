@@ -308,77 +308,15 @@ remove_tag(phylo)</code></pre>
     endId &lt;- endId + 3
     PositionOfAminoAcid &lt;- PositionOfAminoAcid + 1 
   }
-  for (i in 1:numberOfAminoAcid) {
-    if(AminoAcid[i] == &quot;TTT&quot; | AminoAcid[i] == &quot;TTC&quot;){
-      result[i] &lt;- &quot;F&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[CT][T]&quot;)){
-      result[i] &lt;- &quot;L&quot;
-    }    
-    else if(str_detect(AminoAcid[i], &quot;^[A][T][TCA]&quot;)){
-      result[i] &lt;- &quot;I&quot;
-    }   
-    else if(AminoAcid[i] == &quot;ATG&quot;){
-      result[i] &lt;- &quot;M&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[G][T]&quot;)){
-      result[i] &lt;- &quot;V&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[T][C]&quot;)){
-      result[i] &lt;- &quot;S&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[C][C]&quot;)){
-      result[i] &lt;- &quot;P&quot;
-    } 
-    else if(str_detect(AminoAcid[i], &quot;^[A][C]&quot;)){
-      result[i] &lt;- &quot;T&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[G][C]&quot;)){
-      result[i] &lt;- &quot;A&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[T][A][TC]&quot;)){
-      result[i] &lt;- &quot;Y&quot;
-    }
-    else if((str_detect(AminoAcid[i], &quot;^[T][A][AG]&quot;)) | AminoAcid[i] == &quot;TGA&quot;){
-      result[i] &lt;- &quot;Stop&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[C][A][TC]&quot;)){
-      result[i] &lt;- &quot;H&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[C][A][AG]&quot;)){
-      result[i] &lt;- &quot;Q&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[A][A][TC]&quot;)){
-      result[i] &lt;- &quot;N&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[A][A][AG]&quot;)){
-      result[i] &lt;- &quot;K&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[G][A][TC]&quot;)){
-      result[i] &lt;- &quot;D&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[G][A][AG]&quot;)){
-      result[i] &lt;- &quot;E&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[T][G][TC]&quot;)){
-      result[i] &lt;- &quot;C&quot;
-    }
-    else if(AminoAcid[i] == &quot;TGG&quot;){
-      result[i] &lt;- &quot;W&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[C][G]&quot;)){
-      result[i] &lt;- &quot;R&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[A][G][TC]&quot;)){
-      result[i] &lt;- &quot;S&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[A][G][AG]&quot;)){
-      result[i] &lt;- &quot;R&quot;
-    }
-    else if(str_detect(AminoAcid[i], &quot;^[G][G]&quot;)){
-      result[i] &lt;- &quot;G&quot;
+  transfer &lt;- read_csv(&quot;codons.csv&quot;)
+  for(i in 1:numberOfAminoAcid){
+    for (j in 1:nrow(transfer)) {
+      if(AminoAcid[i] == transfer[[1]][j]){
+        result[i] &lt;- transfer[[2]][j]
+      }
     }
   }
+  
   NameOfAminoAcid &lt;- &quot;&quot;
   for (j in 1 : numberOfAminoAcid) {
     NameOfAminoAcid &lt;- str_c(NameOfAminoAcid , result[j])
