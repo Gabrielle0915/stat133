@@ -339,6 +339,7 @@ male90 <- babyNames %>%
   mutate(sex = "M") %>%
   arrange(name)
 pop_90 <- rbind(female90, male90)
+pop_90
 
 ```
 
@@ -397,9 +398,11 @@ for (i in 2006:2015){
   
   ThisYear1000<-  babyNames %>%
     filter(year == i) %>%
-    arrange(desc(n)) %>%
+    group_by(name) %>%
+    summarise(count = sum(n)) %>%
+    arrange(desc(count)) %>%
     head(1000) %>%
-    summarise(ThisYear1000 = sum(n))
+    summarise(ThisYear1000 = sum(count))
   ThisYearTotal <- babyNames %>%
     filter(year == i) %>%
     summarise(ThisYearTotal = sum(n))
@@ -414,3 +417,5 @@ nameperc
 
 ### Discrepancy (0 points)
 Why should we expect our table to look different from the one presented on the SSA page?
+
+We calculate different values. 

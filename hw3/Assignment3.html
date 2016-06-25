@@ -415,14 +415,13 @@ babyNames &lt;- read_csv(file = Filelist[i], col_names = c(&quot;name&quot;, &qu
 ##   5  -- 4 columns 3 columns
 ## ... ... ......... .........
 ## .See problems(...) for more details.</code></pre>
-<pre class="r"><code>babyNames$year = &quot;1880&quot;
+<pre class="r"><code>babyNames$year = 1880
 i = i + 1
 while(i &lt; FileNumber){
   newFile &lt;- read_csv(file = Filelist[i], col_names = c(&quot;name&quot;, &quot;sex&quot;, &quot;n&quot;, &quot;year&quot;), col_types = &quot;cci&quot;)
   babyNames &lt;- rbind(babyNames,newFile)
   numInThisYear = nrow(newFile)
-  year &lt;- str_extract(Filelist[i], &quot;[0-9]{4}&quot;)
-  babyNames$year[(TotalBeforethisYear+1):(TotalBeforethisYear+numInThisYear)] = year
+  babyNames$year[(TotalBeforethisYear+1):(TotalBeforethisYear+numInThisYear)] = 1879+i
   TotalBeforethisYear = TotalBeforethisYear + numInThisYear
   i = i + 1
 }</code></pre>
@@ -1780,7 +1779,37 @@ while(i &lt; FileNumber){
 <div id="part-2-4-points-1" class="section level3">
 <h3>Part 2 (4 points)</h3>
 <p>What were the top 3 most popular names by sex in the 90’s and how many people were given each of those names? Your answer should be a six-row data frame with three columns: <code>name</code>, <code>sex</code>, and <code>count</code>. The names should be alphabetical with females first. <strong>pop90</strong></p>
-<pre class="r"><code># Your code here</code></pre>
+<pre class="r"><code># Your code here
+female90 &lt;- babyNames %&gt;%
+  filter(year &gt;= 1990 &amp; year &lt;= 1999) %&gt;%
+  filter(sex == &quot;F&quot;) %&gt;%
+  group_by(name)%&gt;%
+  summarise(count = sum(n)) %&gt;%
+  arrange(desc(count)) %&gt;%
+  head(3) %&gt;%
+  mutate(sex = &quot;F&quot;) %&gt;%
+  arrange(name)
+male90 &lt;- babyNames %&gt;%
+  filter(year &gt;= 1990 &amp; year &lt;= 1999) %&gt;%
+  filter(sex == &quot;M&quot;) %&gt;%
+  group_by(name)%&gt;%
+  summarise(count = sum(n)) %&gt;%
+  arrange(desc(count)) %&gt;%
+  head(3) %&gt;%
+  mutate(sex = &quot;M&quot;) %&gt;%
+  arrange(name)
+pop_90 &lt;- rbind(female90, male90)
+pop_90</code></pre>
+<pre><code>## Source: local data frame [6 x 3]
+## 
+##          name  count   sex
+##         &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
+## 1      Ashley 301789     F
+## 2       Emily 237216     F
+## 3     Jessica 303069     F
+## 4 Christopher 360187     M
+## 5     Matthew 351585     M
+## 6     Michael 462289     M</code></pre>
 </div>
 <div id="part-3-7-points" class="section level3">
 <h3>Part 3 (7 points)</h3>
@@ -1802,11 +1831,69 @@ while(i &lt; FileNumber){
 ## 8  2013 84.33  74.02 70.83
 ## 9  2014 84.28  74.38 70.77
 ## 10 2015 84.15  74.28 70.62</code></pre>
-<pre class="r"><code># Your code here</code></pre>
+<pre class="r"><code># Your code here
+years = c(2006:2015)
+femalePercentage &lt;- rep(0,10)
+malePercentage &lt;- rep(0,10)
+totalPercentage &lt;- rep(0,10)
+
+for (i in 2006:2015){
+  ThisYear1000F&lt;-  babyNames %&gt;%
+    filter(sex == &quot;F&quot;) %&gt;%
+    filter(year == i) %&gt;%
+    arrange(desc(n)) %&gt;%
+    head(1000) %&gt;%
+    summarise(ThisYear1000 = sum(n))
+  ThisYearTotalF &lt;- babyNames %&gt;%
+    filter(sex == &quot;F&quot;) %&gt;%
+    filter(year == i) %&gt;%
+    summarise(ThisYearTotal = sum(n))
+  femalePercentage[i-2005] = round(ThisYear1000F[[1]] / ThisYearTotalF[[1]],4)
+  
+  ThisYear1000M&lt;-  babyNames %&gt;%
+    filter(sex == &quot;M&quot;) %&gt;%
+    filter(year == i) %&gt;%
+    arrange(desc(n)) %&gt;%
+    head(1000) %&gt;%
+    summarise(ThisYear1000 = sum(n))
+  ThisYearTotalM &lt;- babyNames %&gt;%
+    filter(sex == &quot;M&quot;) %&gt;%
+    filter(year == i) %&gt;%
+    summarise(ThisYearTotal = sum(n))
+  malePercentage[i-2005] = round(ThisYear1000M[[1]] / ThisYearTotalM[[1]],4)
+  
+  ThisYear1000&lt;-  babyNames %&gt;%
+    filter(year == i) %&gt;%
+    group_by(name) %&gt;%
+    summarise(count = sum(n)) %&gt;%
+    arrange(desc(count)) %&gt;%
+    head(1000) %&gt;%
+    summarise(ThisYear1000 = sum(count))
+  ThisYearTotal &lt;- babyNames %&gt;%
+    filter(year == i) %&gt;%
+    summarise(ThisYearTotal = sum(n))
+  totalPercentage[i-2005] = round(ThisYear1000[[1]] / ThisYearTotal[[1]], 4)
+  
+}
+
+nameperc &lt;- data.frame(year = c(2006:2015), male = malePercentage, female = femalePercentage, total = totalPercentage)
+nameperc    </code></pre>
+<pre><code>##    year   male female  total
+## 1  2006 0.8603 0.7531 0.7316
+## 2  2007 0.8551 0.7459 0.7233
+## 3  2008 0.8500 0.7409 0.7156
+## 4  2009 0.8452 0.7372 0.7094
+## 5  2010 0.8428 0.7365 0.7074
+## 6  2011 0.8428 0.7371 0.7077
+## 7  2012 0.8412 0.7361 0.7052
+## 8  2013 0.8432 0.7401 0.7083
+## 9  2014 0.8426 0.7435 0.7077
+## 10 2015 0.8412 0.7426 0.7060</code></pre>
 </div>
 <div id="discrepancy-0-points" class="section level3">
 <h3>Discrepancy (0 points)</h3>
 <p>Why should we expect our table to look different from the one presented on the SSA page?</p>
+<p>We calculate different values.</p>
 </div>
 </div>
 
