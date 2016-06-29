@@ -312,6 +312,7 @@ while(i < FileNumber){
   TotalBeforethisYear = TotalBeforethisYear + numInThisYear
   i = i + 1
 }
+head(babyNames)
 
 ```
 
