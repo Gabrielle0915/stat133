@@ -1,0 +1,86 @@
+---
+title: "Lab14"
+author: "Mengyu Li"
+date: "June 29, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+library(ggrepel)
+library(grid)
+library(gridExtra)
+```
+
+```{r, fig.width = 7, fig.asp = 0.8}
+transfer <- function(x){
+  result <- rep("", length(x))
+  i <- 0
+  for(i in 1:length(x))  {
+    if(x[i] == "Americas"){
+      result[i] = "Americas"
+    }
+    else if(x[i] == "Asia Pacific"){
+      result[i] = "Asia & Oceania"
+    }
+    else if(x[i] == "East EU Cemt Asia"){
+      result[i] = "Central & Eastern Europe"
+    }
+    else if(x[i] == "EU W. Europe"){
+      result[i] = "OECD"
+    }
+    else if(x[i] == "MENA"){
+      result[i] = "Middle East & North Africa"
+    }
+    else{
+      result[i] = "sub-Saharan Africa"
+    }
+  }
+  return(result)
+}
+
+
+EconomistData <- read_csv("EconomistData.csv")
+names(EconomistData)[1] <- "number"
+EconomistData <- EconomistData %>%
+  select(-number)
+points_to_label <- c("Russia", "Venezuela", "Iraq", "Myanmar", "Sudan",
+                     "Afghanistan", "Congo", "Greece", "Argentina", "Brazil",
+                     "India", "Italy", "China", "South Africa", "Spane",
+                     "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France",
+                     "United States", "Germany", "Britain", "Barbados", "Norway", 
+                     "Japan", "New Zealand", "Singapore")
+
+labelData <- EconomistData %>%
+  filter(Country %in% points_to_label) %>%
+  mutate(text = Country)
+EconomistData <- left_join(EconomistData, labelData)
+EconomistData <- EconomistData %>%
+  mutate(Region = transfer(Region))
+
+p <- ggplot(EconomistData, aes(x = CPI, y = HDI)) + geom_smooth(method="lm",se=FALSE,color="red", formula = y ~ log(x)) + geom_point(aes(color = Region), shape = 1, size = 2, stroke = 2) + geom_text_repel(aes(label = text), color = "gray20") + xlab("Corruption Perceptions Index, 2011(10 = least corrupt)") + ylab("Human Development Index, 2011(1 = Best)") + ggtitle("Corruption and Human Develpment") + scale_x_continuous(limits = c(1, 10), breaks = c(1,2,3,4,5,6,7,8,9,10)) + scale_y_continuous(limits = c(0.2, 1.0), breaks = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0)) + scale_color_manual(values = c("#099DD7", "#28AADC","#248E84", "#F2583F", "#24576D", "#96503F")) + theme_minimal() + theme(legend.position = "top", legend.direction = "horizontal", text = element_text(color = "gray20"),
+legend.justification = 0.1, # anchor point for legend.position.
+legend.text = element_text(size = 11, color = "gray10"),
+axis.text = element_text(face = "italic"),
+axis.title.x = element_text(vjust = -1), # move title away from axis
+axis.title.y = element_text(vjust = 2), # move away for axis
+axis.line = element_line(color = "gray40", size = 0.5),
+panel.grid.major = element_line(color = "gray50", size = 0.5),
+panel.grid.major.x = element_blank())
+
+footnote <- "Sources: Transparency International; UN Human Development Report"
+footgrob <- textGrob(footnote, x = 0, hjust = -0.1, vjust=0.1, gp = gpar(fontface = "italic", fontsize = 12))
+g <- arrangeGrob(p, bottom = footgrob)
+grid.draw(g)
+
+```
+
