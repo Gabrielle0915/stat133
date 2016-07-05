@@ -54,12 +54,12 @@ ggplot(tents)+geom_bar(aes(x=brand))
 2.  Modify the code from number 1 to add color for the brands.
 
 ```{r}
-ggplot(tents,aes(x=brand,fill=brand))+geom_bar()
+ggplot(tents,aes(x=brand))+geom_bar(aes(fill = brand))
 ```
 
 3.  Create a bar chart of `brand` colored by `bestuse`.
 ```{r}
-ggplot(tents,aes(x=brand))+geom_bar(aes(fill=bestuse))
+ggplot(tents,aes(x=brand))+geom_bar(aes(fill = bestuse))
 ```
 
 ---
@@ -68,12 +68,12 @@ ggplot(tents,aes(x=brand))+geom_bar(aes(fill=bestuse))
 
 1.  Create a scatter plot of `height` vs. `weight`.  Color and shape the points by `bestuse`. 
 ```{r}
-ggplot(tents,aes(x=height,y=weight))+geom_point(aes(color=bestuse))
+ggplot(tents,aes(x=height,y=weight, color = bestuse))+geom_point()
 ```
 
 2.  Add a line of best fit under the points using `geom_smooth`.  Use `method = "lm"` to produce a line rather than a polynomial.  Change `se` to `FALSE` to remove the confidence regions.  Lastly, change the color of the line to `grey75`.
 ```{r}
-ggplot(tents,aes(x=height,y=weight))+geom_point(aes(color=bestuse))+geom_smooth(method="lm",se=FALSE,color="grey75")
+ggplot(tents,aes(x=height,y=weight))+geom_point(aes(color=bestuse))+geom_smooth(method="lm",se = FALSE,color="grey75")
 ```
 
 ## Faceting

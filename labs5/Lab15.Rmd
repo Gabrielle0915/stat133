@@ -1,0 +1,113 @@
+---
+title: "Lab15"
+author: "Mengyu Li"
+date: "July 5, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(xml2)
+```
+
+## Example of Checking Work
+The best way to deal with the `xml` data is to copy and paste it into a plain-text editor and save it as a `.xml` file.  Windows users, it's highly suggested you either use a Cygwin utility like nano or download Notepad++ rather than use Notepad.  I've saved the following data into `weather.xml` in the lab folder:
+
+To read the data, we'll need `read_xml()` from the `xml2` package.
+```{r}
+# read_xml(path_to_xml_file)
+weather <- read_xml("weather.xml")
+```
+
+To test your XPath, use `xml_find_all()`.  The `text()` at the end grabs the text nodes.
+```{r}
+# xml_find_all(xml_doc, xpath)
+xml_find_all(weather, "/current_observation/latitude/text()")
+xml_find_all(weather, "//latitude/text()")
+```
+
+We'll go over the package in more detail tomorrow.  Today, let's just focus on understanding XML structure and XPath syntax.
+
+## Basic XPath
+
+Write XPaths that:
+
+1. Get the contents of the attribute `name`.
+```{r}
+doc <- read_xml("<document name='lab15' />")
+  
+xml_find_all(doc, "/document/@name")
+```
+
+2. Select all document elements beneath the node `linkList` with the name `A`.
+
+```{r}
+document <- read_xml("<document xmlns:xlink='http://www.w3.org/1999/xlink'>
+  <linkList name='A'>
+    <document xlink:href='15024' />
+    <document xlink:href='15028' />
+  </linkList>
+  <linkList name='B'>
+    <document xlink:href='15030' />
+    <document xlink:href='15032' />
+  </linkList>
+</document>")
+
+xml_find_all(document, "/document/linkList[@name='A']")
+
+
+
+```
+
+
+3. Select all jobs with `priority` corresponding to "critical" or "high".
+```{r}
+job <- read_xml("jobs.xml")
+xml_find_all(job, "/jobs/job[@priority='critical' or @priority='high']")
+```
+
+4. Select all persons older than 25
+```{r}
+persons <- read_xml("persons.xml")
+xml_find_all(persons, "/persons/person[@age>25]")
+```
+
+5. Select the names of the artists of every CD.
+
+```{r}
+collection <- read_xml("collection.xml")
+xml_find_all(collection, "//name")
+```
+## XPathing
+
+The next five questions refer to the document below.  You may want to draw out the document tree.  Experiment! Do comparisons like =, <, etc. need strings or values? Write XPaths that:
+```{r}
+bookStore <- read_xml("bookstore.xml")
+```
+
+
+6.  Select the prices of all the books.
+```{r}
+xml_find_all(bookStore, "//price")
+```
+
+7.  Select books that are available on the web or on kindles.
+```{r}
+xml_find_all(bookStore, "/bookstore/book[@category='web' or @category='kindle']")
+```
+
+8.  Select books that have page numbers available.
+```{r}
+xml_find_all(bookStore, "//book[pages]")
+```
+
+9.  Select the titles of books priced under $20.
+```{r}
+xml_find_all(bookStore, "//book[price<'20']/title")
+```
+
+10. Select the authors of books that aren't written in English.
+```{r}
+xml_find_all(bookStore, "//book[title[@lang != 'en']]/author")
+```
+
