@@ -1,0 +1,100 @@
+---
+title: "Assignment5"
+author: "Mengyu Li"
+date: "July 11, 2016"
+output: html_document
+---
+## Packages
+
+The following packages are allowed for this assignment:
+
+* rvest
+* xml2
+* ggplot2
+* lubridate
+* stringr
+* dplyr
+* tidyr
+* readr
+* scales
+
+```{r, fig.width=9, fig.asp=0.8}
+library(rvest)
+library(xml2)
+library(ggplot2)
+library(lubridate)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(scales)
+```
+
+
+```{r, fig.width = 9, fig.asp = 0.5}
+page <- read_html("https://en.wikipedia.org/wiki/List_of_nuclear_reactors") %>% 
+  html_nodes(xpath= "//*/table[contains(@class, 'wikitable')]") 
+france <- page %>% 
+  .[[14]] %>% 
+  html_table(fill = TRUE)
+names(france) <- c("name", "reactor", "type", "model", "status", 
+               "net", "gross", "const_start", "op_start", "closure")
+france <- france[-1,] %>%
+  mutate(country = "France")
+
+japan <- page %>% 
+  .[[21]] %>% 
+  html_table(fill = TRUE)
+names(japan) <- c("name", "reactor", "type", "model", "status", 
+               "net", "gross", "const_start", "op_start", "closure")
+japan <- japan[-1,] %>%
+  mutate(country = "Japan")
+
+data <- rbind(japan,france)
+data$type<- str_replace(data$type,"BWR", "Boiling Water") %>% 
+  str_replace("FBR", "Fast Breeder") %>% 
+  str_replace("PWR", "Pressurized Water") %>% 
+  str_replace("GCR", "Gas Cooled") %>% 
+  str_replace("HWGCR", "Heavy Water Gas Cooled") 
+data$const_start<- dmy(data$const_start)
+data$net <- as.integer(data$net)
+
+ggplot(data[which(data$type != ""),]) +
+  geom_point(aes(x=year(const_start),y=net, shape = type, color = country),size = 2) +
+  scale_x_continuous(limits = c(1955, 2005), 
+                     breaks = seq(1960,2000,by=10)) +
+  scale_y_continuous(limits = c(0,1500), 
+                     breaks = seq(0, 1500, by = 500)) +
+    labs(title = "Net Reactor Capacities in France and Japan",
+       x = "Construction Start Date",
+       y = "Net Capacity(MW)")
+
+```
+
+
+```{r, fig.width = 9, fig.asp = 0.8}
+japan$op_start <- dmy(japan$op_start)
+japan$const_start<- dmy(japan$const_start)
+japan$type<- str_replace(japan$type,"BWR", "Boiling Water") %>% 
+  str_replace("FBR", "Fast Breeder") %>% 
+  str_replace("PWR", "Pressurized Water") %>% 
+  str_replace("GCR", "Gas Cooled") %>% 
+  str_replace("HWGCR", "Heavy Water Gas Cooled") 
+japan <- mutate(japan, num = row_number())
+japan <- mutate(japan, cb = paste(japan$name,japan$num, ""))
+japan$cb <- rev(japan$cb)
+japan <- mutate(japan, replace = paste(japan$name,japan$reactor,""))
+japan$replace <- sort(japan$replace, decreasing = T) %>%
+  str_replace("1","") %>% 
+  str_replace_all(".*[0-9].*", "")
+
+ggplot(japan[which(japan$type != ""),],aes(x=year(const_start), y=cb))+
+  geom_segment(aes(xend=year(op_start), yend=cb, color = type)) +
+  scale_y_discrete(labels=rev(japan$replace),breaks=(japan$cb))+ 
+  scale_x_continuous(limits = c(1960, 2010), 
+                     breaks = seq(1960,2010,by=5)) +
+    labs(title = "Construction Times for Japanese Nuclear Reactors",
+       x = "Date",
+       y = "Reactor Site")
+```
+
