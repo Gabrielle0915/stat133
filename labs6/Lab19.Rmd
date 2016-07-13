@@ -170,7 +170,7 @@ averageAndMedian <- function(x) {
     firstAverage <- filterNA[1:i]
     orderedAverage <- sort(firstAverage);
     if(length(firstAverage) %% 2 == 0) {
-      median[i] <- (orderedAverage[floor((length(orderedAverage) + 1) / 2)] +  orderedAverage[ceiling((length(orderedAverage) + 1) / 2)]) / 2
+      median[i] <- (orderedAverage[floor((length(orderedAverage) + 1) / 2)] + orderedAverage[ceiling((length(orderedAverage) + 1) / 2)]) / 2
     } 
     else { 
       median[i] <- orderedAverage[(length(orderedAverage) + 1) / 2]
