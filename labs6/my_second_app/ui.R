@@ -1,7 +1,5 @@
 shinyUI(fluidPage(
   
-  titlePanel("Occupancy Rates in Berkeley"),
-  
   sidebarLayout(
     sidebarPanel(
       
