@@ -1,4 +1,5 @@
 library(ggplot2)
+library(dplyr)
 shinyServer(function(input, output) {
   
   output$picture <- renderPlot(
